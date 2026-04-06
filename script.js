@@ -227,8 +227,8 @@ async function loadTasks() {
 }
 
 async function deleteTask(id) {
-    customActionPrompt('Delete Task', 'Are you sure you want to delete this task? (Type anything to confirm)', 'Delete', async (val) => {
-        if(val !== null) {
+    customActionPrompt('Delete Task', 'Are you sure you want to delete this task? This action cannot be undone.', { type: 'checkbox', label: 'Yes, I am completely sure' }, async (val) => {
+        if(val) {
             await apiCall(`/tasks/${id}`, 'DELETE');
             loadTasks();
         }
@@ -236,7 +236,7 @@ async function deleteTask(id) {
 }
 
 function triggerShareAction(id) {
-    customActionPrompt('Share Task', 'Enter the Username of the person you want to share this task with:', 'Username', async (usernameStr) => {
+    customActionPrompt('Share Task', 'Enter the Username of the person you want to share this task with:', { type: 'input', label: 'Username', placeholder: 'e.g. johndoe' }, async (usernameStr) => {
         if(usernameStr) {
             await apiCall(`/tasks/${id}/share`, 'POST', { username: usernameStr });
             loadTasks();
@@ -282,7 +282,7 @@ async function loadGroups() {
 }
 
 function triggerGroupAddAction(id) {
-    customActionPrompt('Add to Group', 'Enter the Username to add them to this group:', 'Username', async (usernameStr) => {
+    customActionPrompt('Add to Group', 'Enter the Username to add them to this group:', { type: 'input', label: 'Username', placeholder: 'e.g. johndoe' }, async (usernameStr) => {
         if(usernameStr) {
             await apiCall(`/groups/${id}/add_user`, 'POST', { username: usernameStr });
             loadGroups();
@@ -419,23 +419,41 @@ groupForm.addEventListener('submit', async (e) => {
 const actionModal = document.getElementById('action-modal');
 const actionTitle = document.getElementById('action-modal-title');
 const actionDesc = document.getElementById('action-modal-desc');
+const actionInputSection = document.getElementById('action-input-section');
 const actionInput = document.getElementById('action-modal-input');
+const actionInputLabel = document.getElementById('action-modal-input-label');
+const actionCheckboxSection = document.getElementById('action-checkbox-section');
+const actionCheckbox = document.getElementById('action-modal-checkbox');
+const actionCheckboxLabel = document.getElementById('action-modal-checkbox-label');
 const actionError = document.getElementById('action-modal-error');
 const actionConfirmBtn = document.getElementById('action-confirm-btn');
 const actionCancelBtn = document.getElementById('action-cancel-btn');
 
 let pendingActionCallback = null;
+let currentActionType = 'input';
 
-function customActionPrompt(title, desc, placeholder, callback) {
+function customActionPrompt(title, desc, inputConfig, callback) {
     actionTitle.textContent = title;
     actionDesc.textContent = desc;
-    actionInput.placeholder = placeholder;
-    actionInput.value = '';
     actionError.classList.add('hidden-pane');
-    actionModal.classList.remove('hidden-pane');
     
-    setTimeout(() => actionInput.focus(), 100);
+    currentActionType = inputConfig.type;
+    
+    if (currentActionType === 'checkbox') {
+        actionInputSection.classList.add('hidden-pane');
+        actionCheckboxSection.classList.remove('hidden-pane');
+        actionCheckbox.checked = false;
+        actionCheckboxLabel.textContent = inputConfig.label || 'Yes, I am sure';
+    } else {
+        actionCheckboxSection.classList.add('hidden-pane');
+        actionInputSection.classList.remove('hidden-pane');
+        actionInput.value = '';
+        actionInput.placeholder = inputConfig.placeholder || '';
+        actionInputLabel.textContent = inputConfig.label || 'Input';
+        setTimeout(() => actionInput.focus(), 100);
+    }
 
+    actionModal.classList.remove('hidden-pane');
     pendingActionCallback = callback;
 }
 
@@ -445,11 +463,22 @@ function closeActionPrompt() {
 }
 
 actionConfirmBtn.addEventListener('click', async () => {
-    const val = actionInput.value.trim();
-    if(!val) {
-        actionError.textContent = 'This field is required.';
-        actionError.classList.remove('hidden-pane');
-        return;
+    let val = null;
+    
+    if (currentActionType === 'checkbox') {
+        if (!actionCheckbox.checked) {
+            actionError.textContent = 'You must confirm by checking the box.';
+            actionError.classList.remove('hidden-pane');
+            return;
+        }
+        val = true;
+    } else {
+        val = actionInput.value.trim();
+        if(!val) {
+            actionError.textContent = 'This field is required.';
+            actionError.classList.remove('hidden-pane');
+            return;
+        }
     }
     
     if (pendingActionCallback) {
