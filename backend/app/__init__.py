@@ -6,7 +6,9 @@ from dotenv import load_dotenv
 
 def create_app():
     load_dotenv()
-    app = Flask(__name__, static_folder='../../frontend', static_url_path='')
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    frontend_dir = os.path.join(current_dir, '..', '..', 'frontend')
+    app = Flask(__name__, static_folder=os.path.abspath(frontend_dir), static_url_path='')
 
     app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY', 'super-secret-collabtask-key')
     app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(days=1)
