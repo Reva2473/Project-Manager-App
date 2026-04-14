@@ -90,7 +90,7 @@
 
 <body class="flex h-screen overflow-hidden">
 
-    <!-- Auth View -->
+    
     <div id="auth-view" class="fixed inset-0 z-50 bg-dark-base flex items-center justify-center fade-in">
         <div class="w-full max-w-md bg-dark-panel border border-dark-border p-8 rounded-xl shadow-2xl">
             <h2 id="auth-title" class="text-2xl font-bold text-white mb-2">Sign In to NexGen</h2>
@@ -125,10 +125,10 @@
         </div>
     </div>
 
-    <!-- Main Dashboard -->
+    
     <div id="dashboard-view" class="hidden-pane flex w-full h-full">
         
-        <!-- Sidebar: Projects -->
+        
         <aside class="w-64 bg-dark-panel border-r border-dark-border flex flex-col h-full flex-shrink-0">
             <div class="h-16 flex items-center justify-between px-6 border-b border-dark-border">
                 <div class="flex items-center gap-2">
@@ -151,7 +151,7 @@
             </div>
             
             <div id="projects-list" class="flex-1 overflow-y-auto px-3 space-y-1">
-                <!-- Projects injected here -->
+                
             </div>
             
             <div class="p-4 border-t border-dark-border">
@@ -169,7 +169,7 @@
             </div>
         </aside>
 
-        <!-- Main Content Area -->
+        
         <main class="flex-1 flex flex-col bg-dark-base min-w-0 overflow-hidden relative">
             
             <div id="no-project-state" class="flex-1 flex items-center justify-center flex-col text-center p-8">
@@ -181,7 +181,7 @@
             </div>
             
             <div id="active-project-state" class="hidden-pane flex-1 flex flex-col h-full overflow-hidden">
-                <!-- Top Header -->
+                
                 <header class="h-16 px-8 flex items-center justify-between border-b border-dark-border bg-dark-base flex-shrink-0">
                     <div class="flex items-center gap-4">
                         <h1 id="active-project-name" class="text-xl font-bold text-white tracking-tight">Project Name</h1>
@@ -200,16 +200,16 @@
                     </div>
                 </header>
 
-                <!-- Project Tabs -->
+                
                 <div class="h-12 border-b border-dark-border bg-dark-base px-8 flex gap-6 flex-shrink-0">
                     <button id="tab-btn-workflow" onclick="switchTab('workflow')" class="text-sm font-bold border-b-2 border-brand-default text-brand-default px-1 py-3 transition-colors">Workflow</button>
                     <button id="tab-btn-manage" onclick="switchTab('manage')" class="text-sm font-medium border-b-2 border-transparent text-dark-muted hover:text-white px-1 py-3 transition-colors">Manage Project</button>
                 </div>
 
-                <!-- Project Layout Content -->
+                
                 <div class="flex-1 flex overflow-hidden relative">
                     
-                    <!-- Tasks Pane -->
+                    
                     <div class="flex-1 overflow-y-auto p-8 relative flex-col w-full h-full" id="pane-workflow">
                         <div class="flex items-center justify-between mb-6">
                             <div>
@@ -223,14 +223,14 @@
                         </div>
                         
                         <div id="tasks-tree-container" class="space-y-4 pb-20">
-                            <!-- Tasks recursively injected here -->
+                            
                         </div>
                     </div>
                     
-                    <!-- Manage Pane -->
+                    
                     <div class="flex-1 overflow-y-auto p-4 lg:p-8 relative flex-col w-full h-full hidden-pane" id="pane-manage">
                         
-                        <!-- Project Settings Modal (Overlay) -->
+                        
                         <div id="project-settings-sec" class="fixed inset-0 z-[70] bg-black/60 hidden-pane flex items-center justify-center p-4">
                             <div class="bg-dark-panel border border-dark-border w-full max-w-2xl rounded-xl shadow-2xl overflow-hidden fade-in flex flex-col">
                                 <div class="px-6 py-5 border-b border-dark-border bg-dark-base flex items-center justify-between">
@@ -258,7 +258,7 @@
 
                         <div class="grid grid-cols-1 xl:grid-cols-2 gap-8 h-[calc(100vh-200px)]">
                             
-                            <!-- Custom Roles Column -->
+                            
                             <div class="flex flex-col h-full border border-dark-border bg-dark-panel rounded-xl overflow-hidden shadow-lg">
                                 <div class="px-5 py-4 border-b border-dark-border flex items-center justify-between bg-dark-base flex-shrink-0">
                                     <div>
@@ -271,11 +271,11 @@
                                     </button>
                                 </div>
                                 <div id="project-roles-list" class="flex-1 overflow-y-auto p-4 flex flex-col gap-3 custom-scrollbar">
-                                    <!-- custom roles injected here -->
+                                    
                                 </div>
                             </div>
                             
-                            <!-- Team Members Column -->
+                            
                             <div class="flex flex-col h-full border border-dark-border bg-dark-panel rounded-xl overflow-hidden shadow-lg">
                                 <div class="px-5 py-4 border-b border-dark-border flex items-center justify-between bg-dark-base flex-shrink-0">
                                     <div>
@@ -288,7 +288,7 @@
                                     </button>
                                 </div>
                                 <div id="project-members-list" class="flex-1 overflow-y-auto p-4 flex flex-col gap-3 custom-scrollbar">
-                                    <!-- Members injected -->
+                                    
                                 </div>
                             </div>
 
@@ -299,9 +299,9 @@
         </main>
     </div>
 
-    <!-- Modals -->
+    
 
-    <!-- Role Modal -->
+    
     <div id="role-modal" class="fixed inset-0 z-[60] bg-black/60 hidden-pane flex items-center justify-center p-4">
         <div class="bg-dark-panel border border-dark-border w-full max-w-md rounded-xl shadow-xl overflow-hidden fade-in flex flex-col">
             <div class="px-6 py-5 border-b border-dark-border">
@@ -318,7 +318,7 @@
                         <label class="block text-sm font-medium text-dark-muted mb-2">Role Color</label>
                         <input type="hidden" id="role-color" value="#3B82F6">
                         <div id="role-color-picker" class="flex flex-wrap gap-2.5">
-                            <!-- 10 Colors: Blue, Purple, Pink, Red, Orange, Yellow, Green, Teal, Cyan, Indigo -->
+                            
                             <div onclick="selectRoleColor('#3B82F6', this)" class="w-8 h-8 rounded-full cursor-pointer border-2 border-white ring-2 ring-brand-default/40 transition-all bg-[#3B82F6]" title="Blue"></div>
                             <div onclick="selectRoleColor('#8B5CF6', this)" class="w-8 h-8 rounded-full cursor-pointer border-2 border-transparent hover:scale-110 transition-all bg-[#8B5CF6]" title="Purple"></div>
                             <div onclick="selectRoleColor('#EC4899', this)" class="w-8 h-8 rounded-full cursor-pointer border-2 border-transparent hover:scale-110 transition-all bg-[#EC4899]" title="Pink"></div>
@@ -333,7 +333,7 @@
                     <div>
                         <label class="block text-sm font-medium text-dark-muted mb-1.5">Root Task Access</label>
                         <select id="role-task" required class="input-dark w-full px-3 py-2 rounded-lg text-sm text-white">
-                            <!-- Options injected -->
+                            
                         </select>
                     </div>
                 </div>
@@ -345,7 +345,7 @@
         </div>
     </div>
 
-    <!-- Notifications Modal -->
+    
     <div id="notif-modal" class="fixed inset-0 z-[60] bg-black/60 hidden-pane flex items-center justify-center p-4">
         <div class="bg-dark-panel border border-dark-border w-full max-w-md rounded-xl shadow-xl overflow-hidden fade-in flex flex-col max-h-[80vh]">
             <div class="px-6 py-4 border-b border-dark-border flex justify-between items-center bg-dark-base">
@@ -353,12 +353,12 @@
                 <button class="text-dark-muted hover:text-white" onclick="document.getElementById('notif-modal').classList.add('hidden-pane')">✕</button>
             </div>
             <div id="notif-list" class="flex-1 overflow-y-auto p-6 space-y-3 bg-dark-panel">
-                <!-- Notifications injected -->
+                
             </div>
         </div>
     </div>
 
-    <!-- Project Modal -->
+    
     <div id="project-modal" class="fixed inset-0 z-[60] bg-black/60 hidden-pane flex items-center justify-center p-4">
         <div class="bg-dark-panel border border-dark-border w-full max-w-md rounded-xl shadow-xl overflow-hidden fade-in">
             <div class="px-6 py-5 border-b border-dark-border">
@@ -383,7 +383,7 @@
         </div>
     </div>
 
-    <!-- Task Modal -->
+    
     <div id="task-modal" class="fixed inset-0 z-[60] bg-black/60 hidden-pane flex items-center justify-center p-4">
         <div class="bg-dark-panel border border-dark-border w-full max-w-lg rounded-xl shadow-xl overflow-hidden fade-in">
             <div class="px-6 py-5 border-b border-dark-border">
@@ -420,7 +420,7 @@
                     <div>
                         <label class="block text-sm font-medium text-dark-muted mb-2">Assignees</label>
                         <div id="task-assignees-container" class="input-dark w-full p-3 rounded-lg text-sm h-32 overflow-y-auto space-y-2 custom-scrollbar">
-                            <!-- injected dynamically -->
+                            
                         </div>
                     </div>
                 </div>
@@ -432,7 +432,7 @@
         </div>
     </div>
 
-    <!-- Generic Input Action Modal -->
+    
     <div id="action-modal" class="fixed inset-0 z-[70] bg-black/60 hidden-pane flex items-center justify-center p-4">
         <div class="bg-dark-panel border border-dark-border w-full max-w-sm rounded-xl shadow-xl overflow-hidden fade-in">
             <div class="px-6 py-5 border-b border-dark-border">
@@ -467,7 +467,7 @@
         </div>
     </div>
     
-    <!-- Remark Modal -->
+    
     <div id="remark-modal" class="fixed inset-0 z-[60] bg-black/60 hidden-pane flex items-center justify-center p-4">
         <div class="bg-dark-panel border border-dark-border w-full max-w-lg rounded-xl shadow-xl overflow-hidden fade-in flex flex-col max-h-[80vh]">
             <div class="px-6 py-4 border-b border-dark-border flex justify-between items-center bg-dark-base">
@@ -475,7 +475,7 @@
                 <button class="text-dark-muted hover:text-white" onclick="document.getElementById('remark-modal').classList.add('hidden-pane')">✕</button>
             </div>
             <div id="remark-list" class="flex-1 overflow-y-auto p-6 space-y-4 bg-dark-panel">
-                <!-- Remarks injected -->
+                
             </div>
             <div class="p-4 bg-dark-base border-t border-dark-border">
                 <form id="remark-form" class="flex gap-2">

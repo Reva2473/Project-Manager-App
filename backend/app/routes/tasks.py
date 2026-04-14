@@ -35,7 +35,7 @@ def create_task():
         
     try:
         project_obj = ObjectId(project_id)
-        # Verify access
+        
         project = projects_collection.find_one({"_id": project_obj})
         if not project:
             return jsonify({"msg": "Project not found"}), 404
@@ -54,13 +54,13 @@ def create_task():
                     
         parent_task_id = data.get('parent_task_id')
         
-        # Check custom roles: MUST be in the assigned subtree
+        
         if user_role not in ['Admin', 'Viewer']:
             custom_role = next((cr for cr in project.get('custom_roles', []) if cr.get('name') == user_role), None)
             if custom_role:
                 assigned_task_id = custom_role.get('task_id')
-                # For custom roles, parent_task_id is MANDATORY (cannot create root tasks)
-                # and must be within the assigned subtree
+                
+                
                 if parent_task_id and is_in_task_tree(parent_task_id, assigned_task_id):
                     allowed = True
                 else:
@@ -100,7 +100,7 @@ def get_tasks_for_project(project_id):
     user_id = get_jwt_identity()
     
     try:
-        # Check permissions
+        
         project = projects_collection.find_one({"_id": ObjectId(project_id)})
         if not project:
             return jsonify({"msg": "Project not found"}), 404
@@ -173,7 +173,7 @@ def update_delete_task(task_id):
     if not task:
         return jsonify({"msg": "Task not found"}), 404
         
-    # Check user role in the project
+    
     project = projects_collection.find_one({"_id": ObjectId(task.get('project_id'))})
     user_role = 'Viewer'
     if project:
@@ -191,7 +191,7 @@ def update_delete_task(task_id):
         if custom_role:
             assigned_task_id = custom_role.get('task_id')
             has_custom_access = is_in_task_tree(task_id, assigned_task_id)
-            # BLOCK any access for custom role if outside assigned subtree
+            
             if not has_custom_access:
                 return jsonify({"msg": "Your role does not have access to this task branch"}), 403
 
@@ -199,7 +199,7 @@ def update_delete_task(task_id):
         if user_role != 'Admin' and not has_custom_access:
             return jsonify({"msg": "Unauthorized to delete tasks"}), 403
         tasks_collection.delete_one({"_id": obj_id})
-        # Delete subtasks
+        
         tasks_collection.delete_many({"parent_task_id": task_id})
         return jsonify({"msg": "Task deleted"})
         
@@ -209,7 +209,7 @@ def update_delete_task(task_id):
             return jsonify({"msg": "Viewers cannot edit tasks"}), 403
 
         if not (user_role == 'Admin' or has_custom_access):
-            # If not Admin or authorized custom role, block everything
+            
             return jsonify({"msg": "Unauthorized access to this task branch"}), 403
 
         update_fields = {}
@@ -251,7 +251,7 @@ def add_remark(task_id):
                     user_role = m.get('role', 'Viewer')
                     break
 
-    if user_role == 'None': # Unreachable typically, but allows Viewers
+    if user_role == 'None': 
         return jsonify({"msg": "Unauthorized"}), 403
 
     data = request.get_json()

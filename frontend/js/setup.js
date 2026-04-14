@@ -3,7 +3,7 @@ const API_URL = window.location.hostname.includes('vercel.app') || (window.locat
 let token = localStorage.getItem('collabtask_token');
 let currentUser = JSON.parse(localStorage.getItem('collabtask_user'));
 
-// Auth Elements
+
 const authView = document.getElementById('auth-view');
 const dashboardView = document.getElementById('dashboard-view');
 const toggleAuthBtn = document.getElementById('toggle-auth');
@@ -19,7 +19,7 @@ const confirmPasswordInput = document.getElementById('confirm-password');
 
 let isLogin = true;
 let activeProjectId = null;
-let projectMembers = []; // Cache members of active project for task assignments
+let projectMembers = []; 
 let userRoleInProject = 'Viewer';
 
 function init() {

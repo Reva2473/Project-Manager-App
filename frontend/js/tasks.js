@@ -17,7 +17,7 @@ function extractTree(tasks, parentId = null) {
     const nodes = tasks.filter(t => t.parent_task_id === parentId);
     for (let current of nodes) {
         current.children = extractTree(tasks, current.id);
-        // Calculate progress based on children
+        
         let total = 0; let done = 0;
         
         function calcStats(node) {
@@ -54,7 +54,7 @@ function renderTaskTree() {
             const hasChildren = node.children.length > 0;
             const borderCol = node.priority === 'High' ? 'border-l-red-500' : (node.priority === 'Medium' ? 'border-l-orange-500' : 'border-l-green-500');
             
-            // Check permissions for mark as done
+            
             const isAssigned = node.assignees && node.assignees.some(a => a.user_id === currentUser.id);
             const canMarkDone = userRoleInProject === 'Admin' || isAssigned;
             
@@ -87,8 +87,8 @@ function renderTaskTree() {
                             <p class="text-xs text-dark-muted mb-3">${node.description || 'No description'}</p>
                             
                             <div class="flex flex-wrap items-center gap-3 text-[10px] font-medium text-dark-muted uppercase tracking-wider">
-                                ${node.priority ? `<div class="flex items-center gap-1 border border-dark-border px-2 py-1 rounded bg-dark-base ${node.priority === 'High' ? 'text-red-400' : ''}"><span>⚡ ${node.priority}</span></div>` : ''}
-                                ${node.due_date ? `<div class="flex items-center gap-1 border border-dark-border px-2 py-1 rounded bg-dark-base text-orange-200"><span>📅 ${node.due_date}</span></div>` : ''}
+                                ${node.priority ? `<div class="flex items-center gap-1.5 border border-dark-border px-2 py-1 rounded bg-dark-base ${node.priority === 'High' ? 'text-red-400' : (node.priority === 'Medium' ? 'text-orange-400' : 'text-green-400')}"><svg width="10" height="10" fill="currentColor" viewBox="0 0 16 16"><path d="M5.52.359A.5.5 0 0 1 6 0h4a.5.5 0 0 1 .474.658L8.694 6H12.5a.5.5 0 0 1 .395.807l-7 9a.5.5 0 0 1-.873-.454L6.823 9.5H3.5a.5.5 0 0 1-.48-.641l2.5-8z"/></svg><span class="uppercase tracking-wider">${node.priority}</span></div>` : ''}
+                                ${node.due_date ? `<div class="flex items-center gap-1 border border-dark-border px-2 py-1 rounded bg-dark-base text-orange-200"><span>📅 ${node.due_date.split('-').reverse().join('-')}</span></div>` : ''}
                                 ${node.assignees && node.assignees.length > 0 ? 
                                     `<div class="flex items-center gap-1 border border-dark-border px-2 py-1 rounded bg-dark-base">
                                         👥 ${node.assignees.map(a => a.username).join(', ')}
@@ -155,7 +155,7 @@ window.triggerNewTask = function(parentId = null) {
     document.getElementById('task-parent-id').value = parentId || '';
     document.getElementById('task-modal-title').textContent = parentId ? 'Create Subtask' : 'Create Root Task';
     
-    // Populate Assignees selector
+    
     const container = document.getElementById('task-assignees-container');
     if (projectMembers.length === 0) {
         container.innerHTML = '<div class="text-dark-muted text-xs italic">No members available to assign.</div>';
@@ -184,7 +184,7 @@ window.triggerEditTask = function(taskId) {
     document.getElementById('task-date').value = task.due_date || '';
     document.getElementById('task-priority').value = task.priority || 'Medium';
     
-    // Populate Assignees selector
+    
     const container = document.getElementById('task-assignees-container');
     if (projectMembers.length === 0) {
         container.innerHTML = '<div class="text-dark-muted text-xs italic">No members available to assign.</div>';
@@ -228,7 +228,7 @@ document.getElementById('task-form').addEventListener('submit', async (e) => {
             payload.parent_task_id = pId ? pId : null;
             await apiCall('/tasks/', 'POST', payload);
         } else {
-            // Edit
+            
             await apiCall(`/tasks/${targetId}`, 'PUT', payload);
         }
         document.getElementById('task-modal').classList.add('hidden-pane');
@@ -291,7 +291,7 @@ window.openRemarks = function(taskId) {
     }
     
     document.getElementById('remark-modal').classList.remove('hidden-pane');
-    // scroll to bottom
+    
     list.scrollTop = list.scrollHeight;
 }
 
@@ -303,8 +303,8 @@ document.getElementById('remark-form').addEventListener('submit', async(e) => {
     try {
         await apiCall(`/tasks/${taskId}/remark`, 'POST', { text });
         document.getElementById('remark-input').value = '';
-        await loadTasks(); // reload data
-        openRemarks(taskId); // re-render remarks window
+        await loadTasks(); 
+        openRemarks(taskId); 
     } catch(err) { alert(err.message); }
 });
 
@@ -345,7 +345,7 @@ function renderRoles(roles) {
 window.deleteCustomRole = async function(roleId) {
     if(confirm('Are you sure you want to delete this role? Members with this role will become Viewers.')) {
         await apiCall(`/projects/${activeProjectId}/roles/${roleId}`, 'DELETE');
-        loadProjects(); // this will refresh the UI
+        loadProjects(); 
     }
 }
 
@@ -358,14 +358,14 @@ window.triggerCreateRole = function() {
         taskSelect.innerHTML = allTasks.map(t => `<option value="${t.id}">${t.title}</option>`).join('');
     }
     
-    // EXCLUDE TAKEN COLORS
+    
     const p = allProjects.find(x => x.id === activeProjectId);
     const takenColors = p && p.custom_roles ? p.custom_roles.map(r => r.color.toUpperCase()) : [];
     const dots = document.querySelectorAll('#role-color-picker div');
     let firstAvailable = null;
 
     dots.forEach(dot => {
-        // Get hex from onclick string
+        
         const match = dot.getAttribute('onclick').match(/#(?:[0-9a-fA-F]{3}){1,2}/);
         const hex = match ? match[0].toUpperCase() : '';
         if(takenColors.includes(hex)) {
@@ -378,7 +378,7 @@ window.triggerCreateRole = function() {
 
     document.getElementById('role-modal').classList.remove('hidden-pane');
     
-    // Reset color picker to first available color
+    
     if(firstAvailable) selectRoleColor(firstAvailable.hex, firstAvailable.el);
 }
 
@@ -396,14 +396,14 @@ window.updateProjectDetails = async function() {
     const description = document.getElementById('edit-proj-desc').value;
     try {
         await apiCall(`/projects/${activeProjectId}`, 'PUT', { name, description });
-        toggleProjectSettings(); // close modal
+        toggleProjectSettings(); 
         loadProjects();
     } catch(err) { alert(err.message); }
 }
 
 window.selectRoleColor = function(hex, el) {
     document.getElementById('role-color').value = hex;
-    // Update UI highlights
+    
     const items = document.querySelectorAll('#role-color-picker div');
     items.forEach(item => {
         item.classList.remove('border-white', 'ring-2', 'ring-brand-default/40');

@@ -25,7 +25,7 @@ def handle_projects():
         return jsonify({"msg": "Project created", "project_id": str(result.inserted_id)}), 201
         
     if request.method == 'GET':
-        # Find projects where user is owner or member
+        
         user_projects = projects_collection.find({
             "$or": [
                 {"owner_id": user_id},
@@ -75,7 +75,7 @@ def delete_project(project_id):
     if not project:
         return jsonify({"msg": "Project not found"}), 404
         
-    # Check if Admin or owner
+    
     is_admin = project.get('owner_id') == user_id
     if not is_admin:
         for m in project.get('members', []):
@@ -88,7 +88,7 @@ def delete_project(project_id):
         
     projects_collection.delete_one({"_id": obj_id})
     
-    # Also delete associated tasks
+    
     from app.extensions import tasks_collection
     tasks_collection.delete_many({"project_id": project_id})
     
@@ -107,7 +107,7 @@ def add_member(project_id):
     if not project:
         return jsonify({"msg": "Project not found"}), 404
         
-    # Check if Admin or owner
+    
     is_admin = project.get('owner_id') == user_id
     if not is_admin:
         for m in project.get('members', []):
@@ -131,7 +131,7 @@ def add_member(project_id):
         
     add_user_id_str = str(user_to_add['_id'])
     
-    # Check if already a member
+    
     for m in project.get('members', []):
         if m.get('user_id') == add_user_id_str:
             return jsonify({"msg": "User is already a member"}), 400
@@ -169,7 +169,7 @@ def edit_member_role(project_id, member_id):
     data = request.get_json()
     new_role = data.get('role')
     
-    # We remove the old and push the new or update using $set and arrayFilters
+    
     projects_collection.update_one(
         {"_id": obj_id, "members.user_id": member_id},
         {"$set": {"members.$.role": new_role}}
@@ -186,7 +186,7 @@ def handle_invite(project_id):
         return jsonify({"msg": "Invalid project ID"}), 400
         
     data = request.get_json()
-    action = data.get('action') # "accept" or "decline"
+    action = data.get('action') 
     
     if action == 'accept':
         projects_collection.update_one(
@@ -248,7 +248,7 @@ def create_custom_role(project_id):
         
     data = request.get_json()
     name = data.get('name')
-    color = data.get('color', '#3B82F6') # default brand-default
+    color = data.get('color', '#3B82F6') 
     task_id = data.get('task_id')
     
     if not name or not task_id:
@@ -289,7 +289,7 @@ def delete_custom_role(project_id, role_id):
     if not is_admin:
         return jsonify({"msg": "Unauthorized"}), 403
         
-    # Optional: Revert members to 'Viewer' if they had this role
+    
     role_to_delete = next((r for r in project.get('custom_roles', []) if r.get('id') == role_id), None)
     if role_to_delete:
          projects_collection.update_many(

@@ -5,7 +5,7 @@ async function loadProjects() {
         allProjects = await apiCall('/projects/');
         const list = document.getElementById('projects-list');
         
-        // Filter out pending projects for sidebar
+        
         const activeProjects = [];
         const pendingProjects = [];
         
@@ -106,7 +106,7 @@ async function selectProject(id) {
     const project = allProjects.find(p => p.id === id);
     if (!project) return;
     
-    // Refresh sidebar highlights
+    
     const listBtns = document.getElementById('projects-list').children;
     Array.from(listBtns).forEach(btn => {
         if(btn.textContent.trim() === project.name) {
@@ -122,7 +122,7 @@ async function selectProject(id) {
     document.getElementById('active-project-name').textContent = project.name;
     document.getElementById('active-project-desc').textContent = project.description || 'No description provided.';
     
-    // Determine Role
+    
     userRoleInProject = 'Viewer';
     if (project.owner_id === currentUser.id) userRoleInProject = 'Admin';
     else {
@@ -134,7 +134,7 @@ async function selectProject(id) {
     const roleHtml = getRoleHtml(userRoleInProject, 'text-xs');
     roleSpan.outerHTML = roleHtml.replace('<span', '<span id="active-project-role"');
     
-    // UI toggles based on role
+    
     const delBtn = document.getElementById('delete-project-btn');
     const leaveBtn = document.getElementById('leave-project-btn');
     const addBtn = document.getElementById('show-add-member-btn');
@@ -147,7 +147,7 @@ async function selectProject(id) {
         delBtn.classList.remove('hidden-pane');
         addBtn.classList.remove('hidden-pane');
         document.getElementById('show-add-role-btn').classList.remove('hidden-pane');
-        // Show edit project button ONLY for owner (true Admin)
+        
         if(project.owner_id === currentUser.id) {
             document.getElementById('show-edit-project-btn').classList.remove('hidden-pane');
         } else {
@@ -166,10 +166,10 @@ async function selectProject(id) {
         rootTaskBtn.classList.remove('hidden-pane');
     }
     
-    // filter so tasks can only be assigned to "Joined" members
+    
     projectMembers = project.members.filter(m => m.status === 'Joined');
     
-    // Auto-fill hidden setttings inputs
+    
     if(project.owner_id === currentUser.id) {
         document.getElementById('edit-proj-name').value = project.name;
         document.getElementById('edit-proj-desc').value = project.description || '';
@@ -186,7 +186,7 @@ function renderMembers(members) {
         const roleTag = getRoleHtml(m.role, 'text-[10px]');
         const canEdit = userRoleInProject === 'Admin' && m.user_id !== currentUser.id;
         
-        // Find tasks completed by this member
+        
         const memberCompletedTasks = allTasks.filter(t => 
             t.is_done && 
             t.assignees && 

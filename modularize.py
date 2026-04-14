@@ -5,22 +5,22 @@ src = "frontend/script.js"
 with open(src, "r", encoding="utf-8") as f:
     content = f.read()
 
-# We will use normal modules but bind everything to window to preserve compatibility
-# Actually, exporting shared state and functions explicitly is better.
 
-# To be safe, we'll split by major sections if they exist in the comments:
-# // Auth Elements
-# // -------------------------
-# // Authentication
-# // -------------------------
-# // Projects Navigation
-# // -------------------------
-# // Action Triggers
-# // -------------------------
-# // Tasks Core
-# // -------------------------
-# // Custom Modal
-# // -------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 sections = {
     "globals": """

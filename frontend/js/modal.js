@@ -32,7 +32,7 @@ function customAction(title, desc, config, callback) {
     actionRoleSec.classList.add('hidden-pane');
     actionCheckboxSec.classList.add('hidden-pane');
     
-    // Populate Role options
+    
     const p = activeProjectId ? allProjects.find(x => x.id === activeProjectId) : null;
     let customRoleHtml = '';
     if(p && p.custom_roles) {
@@ -105,11 +105,11 @@ function renderRoles(roles) {
     }
 
     list.innerHTML = roles.map(r => {
-        // Find matching task for this role
+        
         const taskObj = allTasks.find(t => t.id === r.task_id);
         const taskName = taskObj ? taskObj.title : (r.task_id ? `Task ID: ${r.task_id}` : "Missing Task/Branch");
         
-        // Find members assigned to this role (excluding admin/viewer)
+        
         const p = activeProjectId ? allProjects.find(x => x.id === activeProjectId) : null;
         const roleMembers = p ? p.members.filter(m => m.role === r.name) : [];
         const memberListHtml = roleMembers.length > 0 
