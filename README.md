@@ -62,7 +62,7 @@
 
 1. **Clone the repository:**
    ```bash
-   git clone <repository-url>
+   git clone [https://github.com/Reva2473/TaskMatrix.git]
    cd taskmatrix
    ```
 
